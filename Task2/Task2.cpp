@@ -48,6 +48,7 @@ int Answer(queue<wchar_t> queueRPN)
 				stackRPN.pop();
 				stackRPN.push(ArithmeticOperations(op1, op2, queueRPN.front()));
 				queueRPN.pop();
+			
 		}
 	}
 	return stackRPN.top();
@@ -91,7 +92,7 @@ bool CheckString(wstring str)
 		else
 			i++;
 	}
-	if (stackDigits.size() > stackOperators.size())
+	if (stackDigits.size() == stackOperators.size() + 1)
 		return true;
 	else
 		return false;
