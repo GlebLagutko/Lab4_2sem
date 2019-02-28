@@ -11,6 +11,22 @@
 
 using namespace std;
 
+bool CheckStackes(stack<wchar_t> stackDigits, stack<wchar_t> stackOperators)
+{
+	if (stackDigits.size() >= stackOperators.size() + 1)
+		return true;
+	else
+		return false;
+}
+
+bool IsOperator(wchar_t str)
+{
+	if (str == '+' || str == '-' || str == '*' || str == '/')
+		return true;
+	else
+		return false;
+}
+
 int ArithmeticOperations(const double &op1,const double &op2,const wchar_t   &operation)
 {
 	double result = 0.0;
@@ -48,7 +64,6 @@ int Answer(queue<wchar_t> queueRPN)
 				stackRPN.pop();
 				stackRPN.push(ArithmeticOperations(op1, op2, queueRPN.front()));
 				queueRPN.pop();
-			
 		}
 	}
 	return stackRPN.top();
@@ -85,8 +100,15 @@ bool CheckString(wstring str)
 			}
 			else
 			{
-				stackOperators.push(str[i]);
-				i++;
+				if (IsOperator(str[i]))
+				{
+					stackOperators.push(str[i]);
+					i++;
+					if (!CheckStackes(stackDigits, stackOperators))
+						return false;
+				}
+				else
+					i++;
 			}
 		}
 		else
@@ -110,7 +132,7 @@ int Menu()
 		getline(wcin, str);
 		if (str != L"Exit")
 		{
-			if (CheckString(str) != false)
+			if (CheckString(str) != false && Answer(FillQueue(str)) != NULL)
 			{
 				int p = Answer(FillQueue(str));
 				wcout << L"Answer : " << p << endl;
