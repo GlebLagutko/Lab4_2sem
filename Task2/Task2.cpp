@@ -11,7 +11,7 @@
 
 using namespace std;
 
-bool CheckStackes(stack<wchar_t> stackDigits, stack<wchar_t> stackOperators)
+bool CheckStacks(stack<wchar_t> stackDigits, stack<wchar_t> stackOperators)
 {
 	if (stackDigits.size() >= stackOperators.size() + 1)
 		return true;
@@ -21,13 +21,13 @@ bool CheckStackes(stack<wchar_t> stackDigits, stack<wchar_t> stackOperators)
 
 bool IsOperator(wchar_t str)
 {
-	if (str == '+' || str == '-' || str == '*' || str == '/')
+	if (str == L'+' || str == L'-' || str == L'*' || str == L'/')
 		return true;
 	else
 		return false;
 }
 
-int ArithmeticOperations(const double &op1,const double &op2,const wchar_t   &operation)
+double ArithmeticOperations(const double &op1,const double &op2,const wchar_t   &operation)
 {
 	double result = 0.0;
 	switch (operation)
@@ -44,7 +44,7 @@ int ArithmeticOperations(const double &op1,const double &op2,const wchar_t   &op
 	return result;
 }
 
-int Answer(queue<wchar_t> queueRPN)
+double Answer(queue<wchar_t> queueRPN)
 {
 	stack<double> stackRPN;
 	while (!queueRPN.empty())
@@ -52,7 +52,7 @@ int Answer(queue<wchar_t> queueRPN)
 		if (iswdigit(queueRPN.front()))
 		{
 			wchar_t ch = queueRPN.front();
-			int i = _wtoi(&ch);
+			double i = _wtoi(&ch);
 			stackRPN.push(i);
 			queueRPN.pop();
 		}
@@ -104,7 +104,7 @@ bool CheckString(wstring str)
 				{
 					stackOperators.push(str[i]);
 					i++;
-					if (!CheckStackes(stackDigits, stackOperators))
+					if (!CheckStacks(stackDigits, stackOperators))
 						return false;
 				}
 				else
@@ -134,7 +134,7 @@ int Menu()
 		{
 			if (CheckString(str) != false && Answer(FillQueue(str)) != NULL)
 			{
-				int p = Answer(FillQueue(str));
+				double p = Answer(FillQueue(str));
 				wcout << L"Answer : " << p << endl;
 			}
 			else
@@ -152,7 +152,6 @@ int main()
 	_setmode(_fileno(stdin), _O_U16TEXT);
 	_setmode(_fileno(stderr), _O_U16TEXT);
 	Menu();
-  
 
 	system("pause");
 
