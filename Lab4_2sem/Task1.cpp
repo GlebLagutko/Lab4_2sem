@@ -63,13 +63,14 @@ list<wstring> FillList(wstring name)
 	int days;
 	wifile.open(name);
 	wifile.imbue(locale(locale::empty(), new codecvt_utf8<wchar_t>));
+	wifile.ignore(1);
 	while (!wifile.eof())
 	{
 		getline(wifile, line);
 		if (!line.empty())
 			listFlowers.push_back(line);
 	}
-	listFlowers.pop_front();
+	//listFlowers.pop_front();
 	return listFlowers;
 }
 

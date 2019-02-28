@@ -11,7 +11,7 @@
 
 using namespace std;
 
-bool CheckStacks(stack<wchar_t> stackDigits, stack<wchar_t> stackOperators)
+bool CheckStacks(stack<wstring> stackDigits, stack<wstring> stackOperators)
 {
 	if (stackDigits.size() >= stackOperators.size() + 1)
 		return true;
@@ -19,9 +19,9 @@ bool CheckStacks(stack<wchar_t> stackDigits, stack<wchar_t> stackOperators)
 		return false;
 }
 
-bool IsOperator(wchar_t str)
+bool IsOperator(wstring str)
 {
-	if (str == L'+' || str == L'-' || str == L'*' || str == L'/')
+	if (str == L"+" || str == L"-" || str == L"*" || str == L"/")
 		return true;
 	else
 		return false;
@@ -44,16 +44,15 @@ double ArithmeticOperations(const double &op1,const double &op2,const wchar_t   
 	return result;
 }
 
-double Answer(queue<wchar_t> queueRPN)
+double Answer(queue<wstring> queueRPN)
 {
 	stack<double> stackRPN;
 	while (!queueRPN.empty())
 	{
-		if (iswdigit(queueRPN.front()))
+		if (iswdigit(queueRPN.front()[0]))
 		{
-			wchar_t ch = queueRPN.front();
-			double i = _wtoi(&ch);
-			stackRPN.push(i);
+			double value = (double)_wtof(queueRPN.front().c_str());
+			stackRPN.push(value);
 			queueRPN.pop();
 		}
 		else
@@ -62,22 +61,35 @@ double Answer(queue<wchar_t> queueRPN)
 				stackRPN.pop();
 				double op1 = stackRPN.top();
 				stackRPN.pop();
-				stackRPN.push(ArithmeticOperations(op1, op2, queueRPN.front()));
+				stackRPN.push(ArithmeticOperations(op1, op2, queueRPN.front()[0]));
 				queueRPN.pop();
 		}
 	}
 	return stackRPN.top();
 }
 
-queue<wchar_t> FillQueue(wstring RPN)
+queue<wstring> FillQueue(wstring RPN)
 {
-	queue<wchar_t> queueRPN;
+	queue<wstring> queueRPN;
 	
 	for(int  i = 0; i < RPN.size(); i++)
 	{
 		if (RPN[i] != L' ')
 		{
-			queueRPN.push(RPN[i]);
+			wstring str;
+			if (!iswdigit(RPN[i])) 
+			{
+				str = RPN[i];
+				queueRPN.push(str);
+			}
+			else
+			{
+				int k = i;
+				while (iswdigit(RPN[i]))
+					i++;
+				str = RPN.substr(k, i);
+				queueRPN.push(str);
+			}
 		}
 	}
 
@@ -87,22 +99,25 @@ queue<wchar_t> FillQueue(wstring RPN)
 bool CheckString(wstring str)
 {
 	int i = 0;
-	stack<wchar_t> stackDigits;
-	stack<wchar_t> stackOperators;
+	stack<wstring> stackDigits;
+	stack<wstring> stackOperators;
 	while(i < str.size())
 	{
 		if (str[i] != L' ')
 		{
 			if (iswdigit(str[i]))
 			{
-				stackDigits.push(str[i]);
-				i++;
+				int k = i;
+				while (iswdigit(str[i]))
+					i++;
+				str = str.substr(k, i);
+				stackDigits.push(str);
 			}
 			else
 			{
-				if (IsOperator(str[i]))
+				if (IsOperator(str))
 				{
-					stackOperators.push(str[i]);
+					stackOperators.push(str);
 					i++;
 					if (!CheckStacks(stackDigits, stackOperators))
 						return false;
@@ -123,16 +138,15 @@ bool CheckString(wstring str)
 
 int Menu()
 {
-	int  i = 0;
 	wstring str;
 	
-	while (i == 0)
+	while (true)
 	{
 		wcout << "Input RPN or Exit : ";
 		getline(wcin, str);
 		if (str != L"Exit")
 		{
-			if (CheckString(str) != false && Answer(FillQueue(str)) != NULL)
+			if (CheckString(str) == true)
 			{
 				double p = Answer(FillQueue(str));
 				wcout << L"Answer : " << p << endl;
