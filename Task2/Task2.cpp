@@ -19,9 +19,9 @@ bool CheckStacks(stack<wstring> stackDigits, stack<wstring> stackOperators)
 		return false;
 }
 
-bool IsOperator(wstring str)
+bool IsOperator(wchar_t str)
 {
-	if (str == L"+" || str == L"-" || str == L"*" || str == L"/")
+	if (str == '+' || str == '-' || str == '*' || str == '/')
 		return true;
 	else
 		return false;
@@ -110,12 +110,12 @@ bool CheckString(wstring str)
 				int k = i;
 				while (iswdigit(str[i]))
 					i++;
-				str = str.substr(k, i);
-				stackDigits.push(str);
+				wstring ch = str.substr(k, i);
+				stackDigits.push(ch);
 			}
 			else
 			{
-				if (IsOperator(str))
+				if (IsOperator(str[i]))
 				{
 					stackOperators.push(str);
 					i++;
