@@ -89,6 +89,7 @@ queue<wstring> FillQueue(wstring RPN)
 					i++;
 				str = RPN.substr(k, i);
 				queueRPN.push(str);
+				i--;
 			}
 		}
 	}
@@ -119,7 +120,7 @@ bool CheckString(wstring str)
 				{
 					stackOperators.push(str);
 					i++;
-					if (!CheckStacks(stackDigits, stackOperators))
+					if (CheckStacks(stackDigits, stackOperators) == false)
 						return false;
 				}
 				else
@@ -155,7 +156,10 @@ int Menu()
 				wcout << L"Error !!! Try again " << endl;
 		}
 		else
+		{
+			wcout << L"Goodbye " << endl;
 			break;
+		}
 	}
 	return 0;
 }
