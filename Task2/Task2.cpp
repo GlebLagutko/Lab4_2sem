@@ -123,7 +123,7 @@ bool CheckString(wstring str)
 						return false;
 				}
 				else
-					i++;
+					return false;
 			}
 		}
 		else
